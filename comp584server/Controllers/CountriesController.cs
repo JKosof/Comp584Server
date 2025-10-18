@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldModel;
+using comp584server.DTOs;
 
 namespace comp584server.Controllers
 {
@@ -96,6 +97,36 @@ namespace comp584server.Controllers
         private bool CountryExists(int id)
         {
             return context.Countries.Any(e => e.Id == id);
+        }
+
+        // Replace the following method in CountriesController
+
+        [HttpGet("population")]
+        public async Task<ActionResult<IEnumerable<CountryPopulation>>> GetCountryPopulation()
+        {
+            return await context.Countries
+                .Select(c => new CountryPopulation
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Iso2 = c.Iso2,
+                    Iso3 = c.Iso3,
+                    Population = c.Cities.Sum(city => city.Population)
+                })
+                .ToListAsync();
+        }
+
+        [HttpGet("population/{id}")]
+        public ActionResult<CountryPopulation> GetCountryPopulationById(int id)
+        {            
+            return context.Countries.Select(country => new CountryPopulation
+                {
+                Id = country.Id,
+                Name = country.Name,
+                Iso2 = country.Iso2,
+                Iso3 = country.Iso3,
+                Population = country.Cities.Sum(city => city.Population)
+            }).Single(c => c.Id == id);
         }
     }
 }
