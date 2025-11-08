@@ -19,7 +19,7 @@ namespace comp584server.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        //[Authorize]//commented this out to fix an error
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
