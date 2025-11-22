@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldModel;
 using comp584server.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace comp584server.Controllers
 {
@@ -17,6 +18,7 @@ namespace comp584server.Controllers
 
         // GET: api/Countries
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
         {
             return await context.Countries.ToListAsync();
